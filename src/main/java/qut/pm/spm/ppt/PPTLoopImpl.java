@@ -22,5 +22,9 @@ public class PPTLoopImpl extends PPTNodeImpl {
 		return repetitions;
 	}
 
+	@Override
+	public String formatLabelForNode() {
+		return operator.toString() + " " + getLabel() + "[r" + repetitions + "]";
+	}
 	
 }

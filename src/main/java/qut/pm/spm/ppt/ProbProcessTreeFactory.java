@@ -12,6 +12,8 @@ public class ProbProcessTreeFactory {
 	private static String[] labels = new String[] {};
 	private static Map<String,Integer> labelMap = new HashMap<>();
 
+	private static boolean validation = true;
+	private static ProbProcessTreeFactoryVariant DELEGATE = new SafeProbProcessTreeFactory();
 	
 	public static void initActivityRegistry(String[] labelArray) {
 		labels = labelArray;
@@ -24,9 +26,23 @@ public class ProbProcessTreeFactory {
 	public static int getActivityType(String activity) {
 		return labelMap.getOrDefault(activity,NO_ACTIVITY_TYPE);
 	}
+
+	/**
+	 * Not thread-safe. Intended for configuration time.
+	 * @param val
+	 */
+	public static void setStrictValidation(boolean val) {
+		if (val == validation)
+			return;
+		if (val) {
+			DELEGATE = new SafeProbProcessTreeFactory();
+		}else {
+			DELEGATE = new UnsafeProbProcessTreeFactory();
+		}
+	}
 	
 	public static ProbProcessTree createSilent(double weight) {
-		return new PPTSilentImpl(weight);
+		return DELEGATE.createSilent(weight);
 	}
 	
 	public static ProbProcessTreeLeaf createLeaf(String activity, double weight) {
@@ -36,7 +52,6 @@ public class ProbProcessTreeFactory {
 			existing = labels.length;
 			labelArray[existing] = activity;
 			initActivityRegistry(labelArray);
-
 		}
 		return new PPTLeafImpl(activity,existing+OFFSET, weight);
 	}
@@ -52,53 +67,39 @@ public class ProbProcessTreeFactory {
 	}
 	
 	public static ProbProcessTreeNode createNode(PPTOperator operator) {
-		switch(operator) {
-		case PROBLOOP:
-			throw new UnsupportedOperationException("Loops require repetition parameter");
-		case SEQUENCE:
-			return createSequence();
-		default: 
-			return new PPTNodeImpl(operator);
-		}
+		return DELEGATE.createNode(operator);
+	}
+	
+	public static ProbProcessTreeNode createChoice() {
+		return DELEGATE.createChoice();
+	}
+	
+	public static ProbProcessTreeNode createConcurrency() {
+		return DELEGATE.createConcurrency();
 	}
 	
 	public static ProbProcessTreeNode createLoop(double repetitions) {
-		 return new PPTLoopImpl(repetitions);
+		 return DELEGATE.createLoop(repetitions);
 	}
 
 	public static ProbProcessTreeNode createSequence() {
-		 return new PPTSeqImpl();
+		 return DELEGATE.createSequence();
 	}
 
 	public static ProbProcessTreeNode createLoop(ProbProcessTree child, double repetitions) {
-		ProbProcessTreeNode loop = createLoop(repetitions);
-		loop.addChild(child);
-		return loop;
+		return DELEGATE.createLoop(child,repetitions);
 	}
 
 	public static ProbProcessTree createFrom(ProbProcessTree node, double newWeight) {
-		if (node instanceof ProbProcessTreeLeaf )
-			return createLeaf(node.getLabel(),newWeight);
-		if (node instanceof PPTSilentImpl )
-			return createSilent(newWeight);
-		return createNode(((ProbProcessTreeNode)node).getOperator());
+		return DELEGATE.createFrom(node,newWeight);
 	}
 
 	public static ProbProcessTreeNode copy(ProbProcessTreeNode node) {
-		ProbProcessTreeNode result = createNode(node.getOperator());
-		for (ProbProcessTree child: node.getChildren()) {
-			result.addChild( copy(child) );
-		}
-		return result;
+		return DELEGATE.copy(node);
 	}
 	
 	public static ProbProcessTree copy(ProbProcessTree ppt) {
-		if (ppt instanceof ProbProcessTreeLeaf )
-			return createLeaf(ppt.getLabel(),ppt.getWeight());
-		if (ppt instanceof PPTSilentImpl )
-			return createSilent(ppt.getWeight());
-		return copy(((ProbProcessTreeNode)ppt));
-		
+		return DELEGATE.copy(ppt);
 	}
 	
 }
