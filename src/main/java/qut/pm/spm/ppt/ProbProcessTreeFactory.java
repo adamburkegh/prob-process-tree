@@ -70,6 +70,8 @@ public class ProbProcessTreeFactory {
 		return DELEGATE.createNode(operator);
 	}
 	
+
+	
 	public static ProbProcessTreeNode createChoice() {
 		return DELEGATE.createChoice();
 	}
@@ -94,6 +96,19 @@ public class ProbProcessTreeFactory {
 		return DELEGATE.createFrom(node,newWeight);
 	}
 
+	public static ProbProcessTree createFrom(ProbProcessTree node) {
+		return DELEGATE.createFrom(node);
+	}
+
+	public static ProbProcessTreeNode createNodeFrom(ProbProcessTreeNode node, double newWeight) {
+		return DELEGATE.createNodeFrom(node,newWeight);
+	}
+
+	public static ProbProcessTreeNode createNodeFrom(ProbProcessTreeNode node) {
+		return DELEGATE.createNodeFrom(node);
+	}
+
+	
 	public static ProbProcessTreeNode copy(ProbProcessTreeNode node) {
 		return DELEGATE.copy(node);
 	}

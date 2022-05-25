@@ -82,7 +82,7 @@ public class ProbProcessTreeProjector {
 
 	private static ProbProcessTreeNode replaceChild(ProbProcessTreeNode pptIn, int childIndex, ProbProcessTree pptWith) {
 		ProbProcessTreeNode pptInNode = pptIn;
-		ProbProcessTreeNode newTree = ProbProcessTreeFactory.createNode(pptInNode.getOperator());
+		ProbProcessTreeNode newTree = ProbProcessTreeFactory.createNodeFrom(pptInNode);
 		ProbProcessTree oldChild = pptIn.getChildren().get(childIndex);
 		if (oldChild.getWeight() != pptWith.getWeight()) {
 			pptInNode = (ProbProcessTreeNode)adjustWeights(pptIn,oldChild.getWeight(),pptWith.getWeight());

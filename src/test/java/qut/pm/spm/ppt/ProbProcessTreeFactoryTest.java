@@ -80,4 +80,21 @@ public class ProbProcessTreeFactoryTest {
 		assertFalse(oper.isSilent() );
 		assertFalse(oper.isLeaf() );
 	}
+	
+	@Test
+	public void copyLeaf() {
+		ProbProcessTreeFactory.initActivityRegistry(new String[]{"a","b"});
+		ProbProcessTreeLeaf leaf = ProbProcessTreeFactory.createLeaf("a",2.0);
+		ProbProcessTree leaf2 =  ProbProcessTreeFactory.copy(leaf);
+		assertEquals(leaf,leaf2);
+	}
+	
+	@Test
+	public void copyLoop() {
+		ProbProcessTreeFactory.initActivityRegistry(new String[]{"a","b"});
+		ProbProcessTreeNode loop = ProbProcessTreeFactory.createLoop(4.3);
+		loop.addChild( ProbProcessTreeFactory.createLeaf("b",2.0) );
+		ProbProcessTree loop2 =  ProbProcessTreeFactory.copy(loop);
+		assertEquals(loop,loop2);
+	}
 }

@@ -7,6 +7,8 @@ public interface ProbProcessTreeFactoryVariant {
 	ProbProcessTreeNode copy(ProbProcessTreeNode node);
 
 	ProbProcessTree createFrom(ProbProcessTree node, double newWeight);
+	
+	ProbProcessTree createFrom(ProbProcessTree node);
 
 	ProbProcessTreeNode createLoop(ProbProcessTree child, double repetitions);
 
@@ -25,6 +27,10 @@ public interface ProbProcessTreeFactoryVariant {
 	ProbProcessTreeLeaf createLeaf(String activity, double weight);
 
 	ProbProcessTree createSilent(double weight);
+
+	ProbProcessTreeNode createNodeFrom(ProbProcessTreeNode node, double newWeight);
+
+	ProbProcessTreeNode createNodeFrom(ProbProcessTreeNode node);
 
 	
 }

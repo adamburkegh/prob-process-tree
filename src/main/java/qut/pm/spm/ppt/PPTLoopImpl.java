@@ -1,6 +1,6 @@
 package qut.pm.spm.ppt;
 
-public class PPTLoopImpl extends PPTNodeImpl {
+public class PPTLoopImpl extends PPTNodeImpl implements PPTLoopNode{
 
 	private double repetitions;
 	
