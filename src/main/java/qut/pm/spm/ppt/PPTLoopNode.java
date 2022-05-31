@@ -1,5 +1,5 @@
 package qut.pm.spm.ppt;
 
-public interface PPTLoopNode {
+public interface PPTLoopNode extends ProbProcessTreeNode{
 	public double getLoopRepetitions() ;
 }
