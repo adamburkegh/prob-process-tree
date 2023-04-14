@@ -2,10 +2,11 @@
 plugins {
     id 'java-library'
     id 'maven'
-    // id 'maven-publish'
+    id 'maven-publish'
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -27,5 +28,13 @@ sourceCompatibility = '1.8'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from(components.java)
+        }
+    }
 }
 
