@@ -21,7 +21,7 @@ java{
 }
 
 group = 'qut.pm'
-version = '0.2.2'
+version = '0.2.1'
 description = 'prob-process-tree'
 sourceCompatibility = '1.8'
 
